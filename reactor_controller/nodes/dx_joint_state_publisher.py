@@ -4,6 +4,8 @@ import rospy
 import wx
 import wx.lib.newevent
 import xml.etree.ElementTree as ET
+
+from optparse import OptionParser
 from sensor_msgs.msg import JointState
 from math import pi
 from threading import Thread
@@ -25,42 +27,42 @@ class JointStatePublisher():
     def __init__(self, deps):
         
         self.controller_list = deps
-        self.joint_list = []
-        self.joint_positions = []
+        self.joint_positions = {}
         
-        self.joint_state_sub = []
-        self.joint_command_pub = []
-        self.joints = []
+        self.joint_state_sub = {}
+        self.joint_command_pub = {}
+        self.joint_list = []
+        self.joints = {}
         
         # create subscription list for each joint and command publishers
         for controller_name in deps:
-            joint = get_param(controller_name + '/joint_name')
+            joint = get_param( '/' + controller_name + '/joint')
             
             self.joint_list.append( joint )
             
             s = '/' + controller_name + '/state' 
-            print( 'subscribing to joint %s', s )
+            print( 'subscribing to joint %s' % s )
             self.joint_positions[ joint ] = 0
             self.joint_state_sub[ joint ] = rospy.Subscriber( s, DXJointState, self.process_joint_states )
 
             s = '/' + controller_name + '/command' 
-            print( 'publishing to joint %s', s )
-            self.joint_command_pub[ joint ] = rospy.Publisher(dxl_topic, Float64, queue_size=5 )
+            print( 'publishing to joint %s' % s )
+            self.joint_command_pub[ joint ] = rospy.Publisher( s, Float64, queue_size=5 )
 
         # process the URDF xml to check joint constrains
         description = get_param('robot_description')
         robot = ET.fromstring(description)
 
         for joint_name in self.joint_list:
-            node = robot.findall( ".//*[@name='" + joint_name + "']" )
-            if len( node ) > 1:
+            limits = robot.findall( ".//*[@name='" + joint_name + "']/limit" )
+            if len( limits ) > 1:
                 raise ROSException( 'malformed URDF: more than 1 joint: ' + joint_name )
-            else if len( node ) == 0:
+            elif len( limits ) == 0:
                 raise ROSException( 'URDF shows no joint: ' + joint )
         
-            limit = node.getElementsByTagName('limit')[0]
-            minval = float(limit.getAttribute('lower'))
-            maxval = float(limit.getAttribute('upper'))
+            limit = limits[0]
+            minval = float(limit.get('lower'))
+            maxval = float(limit.get('upper'))
             
             zeroval = 0
             self.joints[ joint_name ] = {'min':minval, 'max':maxval, 'zero':zeroval}
@@ -141,7 +143,7 @@ class JointStatePublisher():
                     has_velocity = True
                 if not has_effort and 'effort' in joint:
                     has_effort = True
-            num_joints = len(self.joints.items()
+            num_joints = len(self.joints.items())
             
             if has_position:
                 msg.position = num_joints * [0.0]
@@ -156,7 +158,7 @@ class JointStatePublisher():
 
                 # Add Free Joint
                 if name in self.joints:
-                    joint = self.free_joints[name]
+                    joint = self.joints[name]
                     factor = 1
                     offset = 0
                 
@@ -288,11 +290,11 @@ if __name__ == '__main__':
         rospy.init_node('joint_state_publisher')
 
         #process dependant controller names
+        parser = OptionParser()
         (options, args) = parser.parse_args(rospy.myargv()[1:])
         joint_controllers = args
-        dependencies = joint_controllers[1:]
 
-        jsp = JointStatePublisher( dependencies )
+        jsp = JointStatePublisher( joint_controllers )
 
         if jsp.gui is None:
             jsp.loop()
