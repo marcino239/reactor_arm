@@ -1,0 +1,8 @@
+<launch>
+
+  <!-- send fake joint values -->
+  <node name="joint_state_publisher" pkg="reactor_controller" type="joint_state_publisher">
+    <param name="use_gui" value="False"/>
+  </node>
+
+</launch>

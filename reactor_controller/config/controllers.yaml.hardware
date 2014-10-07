@@ -1,0 +1,62 @@
+shoulder_yaw_controller:
+  type: dynamixel_hardware_interface/JointPositionController
+  joint: shoulder_yaw
+  max_velocity: 0.3
+  motors:
+    - id: 1
+      init: 512
+      min: 0
+      max: 1023
+shoulder_pitch_controller:
+  type: dynamixel_hardware_interface/JointPositionController
+  joint: shoulder_pitch
+  max_velocity: 0.3
+  motors:
+    - id: 2
+      init: 512
+      min: 200
+      max: 800
+    - id: 3
+      reversed: true
+
+elbow_pitch_controller:
+  type: dynamixel_hardware_interface/JointPositionController
+  joint: elbow_pitch
+  max_velocity: 0.3
+  motors:
+    - id: 5
+      init: 512
+      min: 200
+      max: 800
+    - id: 4
+      reversed: true
+
+wrist_pitch_controller:
+  type: dynamixel_hardware_interface/JointPositionController
+  joint: wrist_pitch
+  max_velocity: 0.3
+  motors:
+    - id: 6
+      init: 512
+      min: 470
+      max: 768
+      reversed: true
+
+wrist_roll_controller:
+  type: dynamixel_hardware_interface/JointPositionController
+  joint: wrist_roll
+  max_velocity: 1
+  motors:
+    - id: 7
+      init: 512
+      min: 256
+      max: 768
+gripper_controller:
+  type: dynamixel_hardware_interface/JointPositionController
+  joint: gripper_joint
+  max_velocity: 1.5
+  motors:
+    - id: 8
+      init: 512
+      min: 0
+      max: 600

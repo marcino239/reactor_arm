@@ -1,0 +1,23 @@
+digraph G {
+node [shape=box];
+"base_link" [label="base_link"];
+"shoulder_link" [label="shoulder_link"];
+"bicep_link" [label="bicep_link"];
+"forearm_link" [label="forearm_link"];
+"wrist_1" [label="wrist_1"];
+"wrist_2" [label="wrist_2"];
+"gripper_link" [label="gripper_link"];
+node [shape=ellipse, color=blue, fontcolor=blue];
+"base_link" -> "shoulder_yaw" [label="xyz: 0 0 0.081 \nrpy: 0 -0 0"]
+"shoulder_yaw" -> "shoulder_link"
+"shoulder_link" -> "shoulder_pitch" [label="xyz: 0 0 0.0265 \nrpy: 0 -0 0"]
+"shoulder_pitch" -> "bicep_link"
+"bicep_link" -> "elbow_pitch" [label="xyz: -0.1445 0 0.0385 \nrpy: 0 -0 0"]
+"elbow_pitch" -> "forearm_link"
+"forearm_link" -> "wrist_pitch" [label="xyz: 0.1535 0 0 \nrpy: 0 -0 0"]
+"wrist_pitch" -> "wrist_1"
+"wrist_1" -> "wrist_roll" [label="xyz: 0.071 0.00175 0 \nrpy: 0 -0 0"]
+"wrist_roll" -> "wrist_2"
+"wrist_2" -> "gripper_joint" [label="xyz: 0.04789 0 0 \nrpy: 0 -0 0"]
+"gripper_joint" -> "gripper_link"
+}
