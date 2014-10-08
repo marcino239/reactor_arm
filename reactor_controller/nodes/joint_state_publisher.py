@@ -174,8 +174,6 @@ class JointStatePublisher():
             joint_controller_dict[ str( name ) ] = rospy.Publisher(dxl_topic, Float64, queue_size=5)
             print( 'Created publisher: ' + dxl_topic )
 
-        dx_msg = Float64()
-
         # Publish Joint States
         while not rospy.is_shutdown():
             msg = JointState()
@@ -307,15 +305,20 @@ class JointStatePublisherGui(wx.Frame):
         panel.SetSizer(box)
         self.center()
         box.Fit(self)
+
+        self.dx_msg = Float64()
         self.update_values()
 
 
     def update_values(self):
         for (name,joint_info) in self.joint_map.items():
             purevalue = joint_info['slidervalue']
-            joint = joint_info['joint']
+
             value = self.sliderToValue(purevalue, joint)
-            joint['position'] = value
+
+            # publish this info to the dynamixel channel
+            joint_controller_dict[ str(name) ].publish( dx_msg )
+
         self.update_sliders()
 
     def updateSliders(self, event):

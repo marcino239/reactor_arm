@@ -12,6 +12,8 @@ from threading import Thread
 from dynamixel_msgs.msg import JointState as DXJointState
 from std_msgs.msg import Float64
 
+import traceback
+
 RANGE = 10000
 
 def get_param(name, value=None):
@@ -36,7 +38,7 @@ class JointStatePublisher():
         
         # create subscription list for each joint and command publishers
         for controller_name in deps:
-            joint = get_param( '/' + controller_name + '/joint')
+            joint = get_param( '/' + controller_name + '/joint_name')
             
             self.joint_list.append( joint )
             
@@ -122,8 +124,6 @@ class JointStatePublisher():
 
         delta = get_param("delta", 0.0)
 
-        dx_msg = Float64()
-
         # Publish Joint States
         while not rospy.is_shutdown():
             msg = JointState()
@@ -165,7 +165,6 @@ class JointStatePublisher():
                 if has_position and 'position' in joint:
                     pos = self.joint_positions[ name ]
                     msg.position[i] = pos
-                    dx_msg.data = pos
                     
                 if has_velocity and 'velocity' in joint:
                     msg.velocity[i] = joint['velocity'] * factor
@@ -197,12 +196,14 @@ class JointStatePublisherGui(wx.Frame):
         panel = wx.Panel(self, wx.ID_ANY);
         box = wx.BoxSizer(wx.VERTICAL)
         font = wx.Font(9, wx.SWISS, wx.NORMAL, wx.BOLD)
+
+        self.dx_msg = Float64()
         
         ### Sliders ###
         for name in self.jsp.joint_list:
             if name not in self.jsp.joints:
                 continue
-            joint = self.jsp.free_joints[name]
+            joint = self.jsp.joints[name]
 
             if joint['min'] == joint['max']:
                 continue
@@ -239,6 +240,7 @@ class JointStatePublisherGui(wx.Frame):
         panel.SetSizer(box)
         self.center()
         box.Fit(self)
+        
         self.update_values()
 
 
@@ -246,8 +248,13 @@ class JointStatePublisherGui(wx.Frame):
         for (name,joint_info) in self.joint_map.items():
             purevalue = joint_info['slidervalue']
             joint = joint_info['joint']
-            value = self.sliderToValue(purevalue, joint)
+            value = self.sliderToValue( purevalue, joint )
             joint['position'] = value
+
+            # send this data to dynamixel
+            self.dx_msg.data = float( value )
+            self.jsp.joint_command_pub[ name ].publish( self.dx_msg )
+
         self.update_sliders()
 
     def updateSliders(self, event):
@@ -286,7 +293,7 @@ class JointStatePublisherGui(wx.Frame):
 
 if __name__ == '__main__':
 
-    try:
+#    try:
         rospy.init_node('joint_state_publisher')
 
         #process dependant controller names
@@ -302,4 +309,4 @@ if __name__ == '__main__':
             Thread(target=jsp.loop).start()
             jsp.app.MainLoop()
         
-    except rospy.ROSInterruptException: pass
+#    except rospy.ROSInterruptException: pass

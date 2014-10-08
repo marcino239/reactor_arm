@@ -5,7 +5,7 @@ Panels:
     Property Tree Widget:
       Expanded: ~
       Splitter Ratio: 0.5
-    Tree Height: 507
+    Tree Height: 467
   - Class: rviz/Help
     Name: Help
   - Class: rviz/Views
@@ -79,7 +79,7 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-      Name: ClamArm
+      Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
       Update Interval: 0
@@ -88,7 +88,7 @@ Visualization Manager:
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
-    Fixed Frame: /base_link
+    Fixed Frame: base_link
     Frame Rate: 30
   Name: root
   Tools:
@@ -100,34 +100,34 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 0.305922
+      Distance: 0.721281
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.06
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.132043
-        Y: -0.208553
-        Z: 0.143776
+        X: 0.0266379
+        Y: -0.0463586
+        Z: 0.00767217
       Name: Current View
       Near Clip Distance: 0.01
-      Pitch: 0.319797
+      Pitch: 0.679797
       Target Frame: base_link
       Value: Orbit (rviz)
-      Yaw: 4.68309
+      Yaw: 3.87307
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: true
-  Height: 744
+  Height: 987
   Help:
     collapsed: false
   Hide Left Dock: true
   Hide Right Dock: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000001d6000002a2fc0200000004fb000000100044006900730070006c0061007900730000000028000002a2000000dd00fffffffb0000000800480065006c00700000000342000000bb0000007600fffffffb0000000a00560069006500770073000000024d000000b0000000b000fffffffb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e006701000003160000017c000000000000000000000515000002a200000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000100000000000001d600000281fc0200000004fb000000100044006900730070006c006100790073000000004500000281000000e400fffffffb0000000800480065006c00700000000342000000bb0000007900fffffffb0000000a00560069006500770073000000024d000000b0000000bb00fffffffb0000001e004d006f00740069006f006e00200050006c0061006e006e0069006e006701000003160000017c0000000000000000000007800000037400000001000000020000000100000002fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1301
-  X: 65
-  Y: 24
+  Width: 1920
+  X: -10
+  Y: 20

@@ -75,6 +75,8 @@ class ControllerManager:
         self.start_controller_lock = Lock()
         self.stop_controller_lock = Lock()
 
+        self.simulation_only = rospy.get_param( '~use_sim', False )
+
         manager_namespace = rospy.get_param('~namespace')
         serial_ports = rospy.get_param('~serial_ports')
         
@@ -103,7 +105,8 @@ class ControllerManager:
                                        self.diagnostics_rate,
                                        error_level_temp,
                                        warn_level_temp,
-                                       readback_echo)
+                                       readback_echo,
+                                       self.simulation_only)
             serial_proxy.connect()
             
             # will create a set of services for each serial port under common manager namesapce

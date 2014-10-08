@@ -41,7 +41,6 @@ __license__ = 'BSD'
 __maintainer__ = 'Antons Rebguns'
 __email__ = 'anton@email.arizona.edu'
 
-
 import time
 import serial
 from array import array
@@ -49,6 +48,8 @@ from binascii import b2a_hex
 from threading import Lock
 
 from dynamixel_const import *
+
+import sys, traceback
 
 exception = None
 
@@ -59,16 +60,25 @@ class DynamixelIO(object):
     multi-servo instruction packet.
     """
 
-    def __init__(self, port, baudrate, readback_echo=False):
+    def __init__(self, port, baudrate, readback_echo=False, simulation_only=False):
         """ Constructor takes serial port and baudrate as arguments. """
+
         try:
-            self.serial_mutex = Lock()
-            self.ser = None
-            self.ser = serial.Serial(port)
-            self.ser.setTimeout(0.015)
-            self.ser.baudrate = baudrate
             self.port_name = port
             self.readback_echo = readback_echo
+            self.simulation_only = simulation_only
+            
+            self.serial_mutex = Lock()
+            self.ser = None
+
+            if not self.simulation_only:
+                self.ser = serial.Serial(port)
+                self.ser.setTimeout(0.015)
+                self.ser.baudrate = baudrate
+            else:
+                #dictionary with last updated motor position
+                self.motor_positions = {}
+
         except SerialOpenError:
            raise SerialOpenError(port, baudrate)
 
@@ -86,6 +96,10 @@ class DynamixelIO(object):
             self.ser.close()
 
     def __write_serial(self, data):
+        
+        if self.simulation_only:
+            return
+        
         self.ser.flushInput()
         self.ser.flushOutput()
         self.ser.write(data)
@@ -101,6 +115,7 @@ class DynamixelIO(object):
             data.extend(self.ser.read(ord(data[3])))
             data = array('B', ''.join(data)).tolist() # [int(b2a_hex(byte), 16) for byte in data]
         except Exception, e:
+            traceback.print_stack()
             raise DroppedPacketError('Invalid response received from motor %d. %s' % (servo_id, e))
 
         # verify checksum
@@ -220,6 +235,10 @@ class DynamixelIO(object):
         "status packet". This can tell us if the servo is attached and powered,
         and if so, if there are any errors.
         """
+
+        if self.simulation_only:
+            return True
+
         # Number of bytes following standard header (0xFF, 0xFF, id, length)
         length = 2  # instruction, checksum
 
@@ -711,6 +730,13 @@ class DynamixelIO(object):
         Should be called as such:
         set_multi_position( ( (id1, position1), (id2, position2), (id3, position3) ) )
         """
+        
+        if self.simulation_only:
+            for sid, position in valueTuples:
+                self.motor_positions[ sid ] = position
+                
+            return
+        
         # prepare value tuples for call to syncwrite
         writeableVals = []
 
@@ -806,6 +832,10 @@ class DynamixelIO(object):
 
     def get_model_number(self, servo_id):
         """ Reads the servo's model number (e.g. 12 for AX-12+). """
+        
+        if self.simulation_only:
+            return 12
+        
         response = self.read(servo_id, DXL_MODEL_NUMBER_L, 2)
         if response:
             self.exception_on_error(response[4], servo_id, 'fetching model number')
@@ -813,6 +843,10 @@ class DynamixelIO(object):
 
     def get_firmware_version(self, servo_id):
         """ Reads the servo's firmware version. """
+        
+        if self.simulation_only:
+            return 1
+        
         response = self.read(servo_id, DXL_VERSION, 1)
         if response:
             self.exception_on_error(response[4], servo_id, 'fetching firmware version')
@@ -820,6 +854,10 @@ class DynamixelIO(object):
 
     def get_return_delay_time(self, servo_id):
         """ Reads the servo's return delay time. """
+
+        if self.simulation_only:
+            return 1
+
         response = self.read(servo_id, DXL_RETURN_DELAY_TIME, 1)
         if response:
             self.exception_on_error(response[4], servo_id, 'fetching return delay time')
@@ -829,6 +867,10 @@ class DynamixelIO(object):
         """
         Returns the min and max angle limits from the specified servo.
         """
+        
+        if self.simulation_only:
+            return {'min':0, 'max':1023}
+        
         # read in 4 consecutive bytes starting with low value of clockwise angle limit
         response = self.read(servo_id, DXL_CW_ANGLE_LIMIT_L, 4)
         if response:
@@ -851,6 +893,11 @@ class DynamixelIO(object):
         """
         Returns the min and max voltage limits from the specified servo.
         """
+        
+        if self.simulation_only:
+            return {'min':5.0, 'max':13.0}
+            
+        
         response = self.read(servo_id, DXL_DOWN_LIMIT_VOLTAGE, 2)
         if response:
             self.exception_on_error(response[4], servo_id, 'fetching voltage limits')
@@ -881,6 +928,10 @@ class DynamixelIO(object):
 
     def get_voltage(self, servo_id):
         """ Reads the servo's voltage. """
+        
+        if self.simulation_only:
+            return 12.0
+        
         response = self.read(servo_id, DXL_PRESENT_VOLTAGE, 1)
         if response:
             self.exception_on_error(response[4], servo_id, 'fetching supplied voltage')
@@ -915,6 +966,26 @@ class DynamixelIO(object):
         Returns the id, goal, position, error, speed, load, voltage, temperature
         and moving values from the specified servo.
         """
+        
+        if self.simulation_only:
+            if servo_id in self.motor_positions:
+                position = self.motor_positions[ servo_id ]
+                goal = position
+            else:
+                position = 512
+                goal = 512
+                
+            return { 'timestamp': time.time(),
+                     'id': servo_id,
+                     'goal': goal,
+                     'position': position,
+                     'error': 0,
+                     'speed': 0,
+                     'load': 1,
+                     'voltage': 12.0,
+                     'temperature': 35.0,
+                     'moving': False }            
+
         # read in 17 consecutive bytes starting with low value for goal position
         response = self.read(servo_id, DXL_GOAL_POSITION_L, 17)
 
