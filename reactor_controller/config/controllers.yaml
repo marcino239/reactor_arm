@@ -24,7 +24,7 @@ shoulder_pitch_controller:
     max: 800
   motor_slave:
     id: 3
-    calibration_offset: 1.57079632679
+    calibration_offset: 0
 elbow_pitch_controller:
   controller:
     package: dynamixel_controllers
@@ -39,7 +39,7 @@ elbow_pitch_controller:
     max: 800
   motor_slave:
     id: 5
-    calibration_offset: 1.57079632679
+    calibration_offset: 0
 wrist_pitch_controller:
   controller:
     package: dynamixel_controllers

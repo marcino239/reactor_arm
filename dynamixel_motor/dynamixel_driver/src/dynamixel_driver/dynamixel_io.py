@@ -744,8 +744,8 @@ class DynamixelIO(object):
             sid = vals[0]
             position = vals[1]
             # split position into 2 bytes
-            loVal = int(position % 256)
-            hiVal = int(position >> 8)
+            loVal = int(position) % 256
+            hiVal = int(position) >> 8
             writeableVals.append( (sid, loVal, hiVal) )
 
         # use sync write to broadcast multi servo message

@@ -1,0 +1,3 @@
+1. check why elbow servos overload.  they appear to be moving in the right direction
+2. configure gripper urdf
+
