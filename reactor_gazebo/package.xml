@@ -1,0 +1,21 @@
+<package>
+  <name>reactor_gazebo</name>
+  <version>0.1.0</version>
+  <description>reactor_gazebo</description>
+  <maintainer email="marcino239">marcino239.github.io</maintainer>
+
+  <license>BSD</license>
+
+  <url type="website">http://marcino239.github.io</url>
+
+  <maintainer email="marcino239">marcino239.github.io</maintainer>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <run_depend>reactor_description</run_depend>
+  <run_depend>reactor_control</run_depend> 
+  <run_depend>gazebo_ros</run_depend> 
+
+  <export>
+  </export>
+</package>
