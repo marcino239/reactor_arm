@@ -3,10 +3,14 @@
     name="model" />
   <arg
     name="gui"
-    default="False" />
-  <param
-    name="robot_description"
-    textfile="$(find reactor_description)/robots/reactor_description.URDF" />
+    default="True" />
+
+<!-- <param name="robot_description"
+    command="$(find xacro)/xacro.py '$(find reactor_description)/urdf/reactor_description.xacro'" /> -->
+    
+<!--      <param name="robot_description"     textfile="$(find reactor_description)/robots/reactor_description.URDF" /> -->
+  <param name="robot_description"     textfile="$(find reactor_description)/urdf/reactor.xml" />
+    
   <param
     name="use_gui"
     value="$(arg gui)" />

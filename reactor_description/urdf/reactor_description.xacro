@@ -5,14 +5,15 @@
   <xacro:include filename="$(find reactor_description)/urdf/reactor.gazebo" />
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find reactor_description)/urdf/materials.xacro" />
-
-  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  
+    <!-- Used for fixing robot to Gazebo 'base_link' -->
   <link name="world"/>
 
   <joint name="fixed" type="fixed">
     <parent link="world"/>
     <child link="base_link"/>
   </joint>
+
   
   <link
     name="base_link">
