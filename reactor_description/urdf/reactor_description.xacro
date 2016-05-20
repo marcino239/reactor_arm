@@ -1,11 +1,19 @@
 <?xml version="1.0"?>
-<robot name="reactor_description">
+<robot name="rrbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
   <xacro:include filename="$(find reactor_description)/urdf/reactor.gazebo" />
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find reactor_description)/urdf/materials.xacro" />
 
+  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  <link name="world"/>
+
+  <joint name="fixed" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+  </joint>
+  
   <link
     name="base_link">
     <visual>
@@ -447,5 +455,5 @@
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
-  
+
 </robot>

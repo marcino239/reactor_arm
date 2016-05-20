@@ -2,13 +2,11 @@
   <name>reactor_gazebo</name>
   <version>0.1.0</version>
   <description>reactor_gazebo</description>
-  <maintainer email="marcino239">marcino239.github.io</maintainer>
+  <maintainer email="marcino239@users.noreply.github.com">marcino239.github.io</maintainer>
 
   <license>BSD</license>
 
   <url type="website">http://marcino239.github.io</url>
-
-  <maintainer email="marcino239">marcino239.github.io</maintainer>
 
   <buildtool_depend>catkin</buildtool_depend>
 
