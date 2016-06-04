@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
-<robot name="rrbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="reactor_arm" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Import all Gazebo-customization elements, including Gazebo colors -->
   <xacro:include filename="$(find reactor_description)/urdf/reactor.gazebo" />
   <!-- Import Rviz colors -->
   <xacro:include filename="$(find reactor_description)/urdf/materials.xacro" />
+
+  <xacro:property name="PI" value="3.1415926535897931"/>
   
     <!-- Used for fixing robot to Gazebo 'base_link' -->
   <link name="world"/>
@@ -14,9 +16,16 @@
     <child link="base_link"/>
   </joint>
 
-  
   <link
     name="base_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia
+	  ixx="1.0" ixy="0.0" ixz="0.0"
+	  iyy="1.0" iyz="0.0"
+	  izz="1.0"/>
+    </inertial>
     <visual>
       <origin
         xyz="0 0 0"
@@ -41,6 +50,7 @@
       </geometry>
     </collision>
   </link>
+ 
   <link
     name="shoulder_link">
     <inertial>
@@ -157,7 +167,7 @@
       lower="0"
       upper="3.141593" />
   </joint>
-  <link
+    <link
     name="forearm_link">
     <inertial>
       <origin
@@ -215,7 +225,7 @@
       lower="0"
       upper="3.141593" />
   </joint>
-  <link
+    <link
     name="wrist_1">
     <inertial>
       <origin
@@ -273,7 +283,7 @@
       lower="-1.57079632679"
       upper="1.57079632679" />
   </joint>
-  <link
+    <link
     name="wrist_2">
     <inertial>
       <origin
@@ -390,7 +400,6 @@
       upper="3.141593" />
   </joint>
   
-  
   <transmission name="shoulder_yaw_tran">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="shoulder_yaw">
@@ -441,17 +450,6 @@
       <hardwareInterface>EffortJointInterface</hardwareInterface>
     </joint>
     <actuator name="motor5">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-      <mechanicalReduction>1</mechanicalReduction>
-    </actuator>
-  </transmission>
-
-  <transmission name="gripper_joint_tran">
-    <type>transmission_interface/SimpleTransmission</type>
-    <joint name="gripper_joint">
-      <hardwareInterface>EffortJointInterface</hardwareInterface>
-    </joint>
-    <actuator name="motor6">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>

@@ -18,7 +18,7 @@
   <gazebo reference="shoulder_link">
     <mu1>0.2</mu1>
     <mu2>0.2</mu2>
-    <material>Gazebo/Black</material>
+    <material>Gazebo/Green</material>
   </gazebo>
 
   <!-- shoulder_yaw -->
