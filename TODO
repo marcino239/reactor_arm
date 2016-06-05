@@ -1,17 +1,3 @@
-launch-sequence:
-
-make ros-indigo-run
-xfce4-terminal
-roscore
-roslaunch reactor_gazebo reactor_world.launch 
-roslaunch reactor_controller reactor_control.launch
-roslaunch reactor_description display.launch 				
-
-set joint command:
-rostopic pub -1 /reactor_arm/elbow_pitch_position_controller/command std_msgs/Float64 "data: 1.5"
-
-
-
 1. check why elbow servos overload.  they appear to be moving in the right direction
 2. configure gripper urdf
 
