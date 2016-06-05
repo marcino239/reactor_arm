@@ -1,3 +1,27 @@
+issues:
+
+1. joints shake due to too small ineratia and too small mass:
+2. shoulder_pitch joint doesn't move - check the limits
+
+solutions for 1:
+change inertia matrix:
+
+      <inertia
+	  ixx="1.0" ixy="0.0" ixz="0.0"
+	  iyy="1.0" iyz="0.0"
+	  izz="1.0"/>
+    </inertial>
+
+change mass to:
+      <mass value="0.1" />
+
+alternatively change time step to increase precision
+http://answers.ros.org/question/12695/gazebo-freaks-when-joints-hit-limits/
+
+
+
 1. check why elbow servos overload.  they appear to be moving in the right direction
 2. configure gripper urdf
+
+
 
