@@ -1,0 +1,27 @@
+<launch>
+
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find reactor_controller)/config/reactor_control.yaml" command="load"/>
+
+  <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+	output="screen" ns="/reactor_arm" args="shoulder_yaw_position_controller
+										shoulder_pitch_position_controller
+										elbow_pitch_position_controller
+										wrist_pitch_position_controller
+										wrist_roll_position_controller
+										joint_state_controller"/>
+  <!--  -->
+
+  <!-- run relay from reactor_arm/joint states.  this normally would be handled by the joint_state_controller,
+       however it doesn't work for some reason -->
+  <node name="copy_joint_states" pkg="topic_tools" type="relay" output="screen" args="/reactor_arm/joint_states /joint_states" />
+
+
+  <!-- convert joint states to TF transforms for rviz, etc -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+	respawn="false" output="screen">
+    <remap from="/joint_states" to="/reactor_arm/joint_states1" />
+  </node>
+
+</launch>

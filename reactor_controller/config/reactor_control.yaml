@@ -1,0 +1,27 @@
+# Publish all joint states -----------------------------------
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50  
+  
+reactor_arm:
+  # Position Controllers ---------------------------------------
+  shoulder_yaw_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: shoulder_yaw
+    pid: {p: 600.0, i: 10.0, d: 10.0, i_clamp: 10}
+  shoulder_pitch_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: shoulder_pitch
+    pid: {p: 600.0, i: 10.0, d: 10.0, i_clamp: 10}
+  elbow_pitch_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: elbow_pitch
+    pid: {p: 600.0, i: 10.0, d: 10.0, i_clamp: 10}
+  wrist_pitch_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: wrist_pitch
+    pid: {p: 600.0, i: 10.0, d: 10.0, i_clamp: 10}
+  wrist_roll_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: wrist_roll
+    pid: {p: 600.0, i: 10.0, d: 10.0, i_clamp: 10}
