@@ -156,7 +156,7 @@
     <axis
       xyz="0 1 0" />
     <limit
-      effort="15"
+      effort="50"
       velocity="6.178465545" 
       lower="0"
       upper="3.141593" />
@@ -212,7 +212,7 @@
     <axis
       xyz="0 -1 0" />
     <limit
-      effort="20"
+      effort="50"
       velocity="6.178465545" 
       lower="0"
       upper="3.141593" />
@@ -268,7 +268,7 @@
     <axis
       xyz="0 1 0" />
     <limit
-      effort="10"
+      effort="50"
       velocity="6.178465545" 
       lower="-1.57079632679"
       upper="1.57079632679" />
