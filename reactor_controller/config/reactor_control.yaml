@@ -8,20 +8,20 @@ reactor_arm:
   shoulder_yaw_position_controller:
     type: effort_controllers/JointPositionController
     joint: shoulder_yaw
-    pid: {p: 600.0, i: 10.0, d: 10.0, i_clamp: 10}
+    pid: {p: 2500.0, i: 800.0, d: 10.0, i_clamp: 4}
   shoulder_pitch_position_controller:
     type: effort_controllers/JointPositionController
     joint: shoulder_pitch
-    pid: {p: 600.0, i: 10.0, d: 10.0, i_clamp: 10}
+    pid: {p: 2500.0, i: 800.0, d: 10.0, i_clamp: 4}
   elbow_pitch_position_controller:
     type: effort_controllers/JointPositionController
     joint: elbow_pitch
-    pid: {p: 600.0, i: 10.0, d: 10.0, i_clamp: 10}
+    pid: {p: 2500.0, i: 800.0, d: 10.0, i_clamp: 4}
   wrist_pitch_position_controller:
     type: effort_controllers/JointPositionController
     joint: wrist_pitch
-    pid: {p: 600.0, i: 10.0, d: 10.0, i_clamp: 10}
+    pid: {p: 2500.0, i: 800.0, d: 10.0, i_clamp: 4}
   wrist_roll_position_controller:
     type: effort_controllers/JointPositionController
     joint: wrist_roll
-    pid: {p: 600.0, i: 10.0, d: 10.0, i_clamp: 10}
+    pid: {p: 2500.0, i: 800.0, d: 10.0, i_clamp: 4}
